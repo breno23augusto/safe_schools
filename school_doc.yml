@@ -1,0 +1,151 @@
+openapi: 3.0.0
+info:
+  title: School API
+  description: Documentation for the School API
+  version: 1.0.0
+servers:
+  - url: http://api.example.com
+paths:
+  /schools:
+    get:
+      summary: Get all schools
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  schools:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/School'
+    post:
+      summary: Create a new school
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSchoolRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  school:
+                    $ref: '#/components/schemas/School'
+  /schools/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: School ID
+        schema:
+          type: integer
+          format: int64
+    get:
+      summary: Get a school by ID
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  school:
+                    $ref: '#/components/schemas/School'
+    put:
+      summary: Update a school by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: School ID
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSchoolRequest'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  school:
+                    $ref: '#/components/schemas/School'
+    delete:
+      summary: Delete a school by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: School ID
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: No Content
+components:
+  schemas:
+    School:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        street:
+          type: string
+        street_number:
+          type: string
+        neighborhood:
+          type: string
+        city:
+          type: string
+        complement:
+          type: string
+          nullable: true
+        state:
+          $ref: '#/components/schemas/StateEnum'
+    CreateSchoolRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        street:
+          type: string
+        street_number:
+          type: string
+        neighborhood:
+          type: string
+        city:
+          type: string
+        complement:
+          type: string
+          nullable: true
+        state:
+          $ref: '#/components/schemas/StateEnum'
+    UpdateSchoolRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        street:
+          type: string
+        street_number:
+          type: string

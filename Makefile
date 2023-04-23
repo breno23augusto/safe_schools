@@ -1,5 +1,5 @@
-docker-bash:
-	- docker exec -it back_php_1 /bin/sh
+bash:
+	- docker exec -it safe_schools_api /bin/sh
 
-docker-up:
-	- docker-compose up -d --build
+up:
+	- docker-compose up -d

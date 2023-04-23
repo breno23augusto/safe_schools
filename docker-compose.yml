@@ -5,6 +5,7 @@ networks:
 
 services:
     nginx:
+        container_name: safe_schools_server
         image: nginx:stable-alpine
         ports:
             - "${NGINX_PORT}:${NGINX_PORT_TO}"
@@ -18,6 +19,7 @@ services:
             - safe_schools
 
     mysql:
+        container_name: safe_schools_db
         image: mysql:latest
         restart: unless-stopped
         tty: true
@@ -35,6 +37,7 @@ services:
             - safe_schools
 
     php:
+        container_name: safe_schools_api
         build:
             context: .
             dockerfile: ./.setup/DockerFile
@@ -44,3 +47,22 @@ services:
             - "${PHP_PORT}:${PHP_PORT_TO}"
         networks:
             - safe_schools
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        restart: always
+        links:
+            - mysql
+            - php
+        ports:
+            - ${PHP_MY_ADMIN_PORT}:${PHP_MY_ADMIN_PORT_TO}
+        networks:
+            - safe_schools
+        depends_on:
+            - mysql
+            - php
+        environment:
+             - PMA_USER=${PMA_USER}
+             - PMA_PASSWORD=${PMA_PASSWORD}
+             - PMA_ARBITRARY=1
+             - PMA_HOST=mysql
