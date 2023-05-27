@@ -69,15 +69,12 @@ class ComplaintController extends Controller
      */
     public function update(Request $request, Complaint $complaint)
     {
-        $request->validate([
-            'school_id' => ['required', 'integer', Rule::exists(School::class)],
-            'organization_id' => ['required', 'integer', Rule::exists(Organization::class)],
-            'is_anonymous' => 'required|bool',
-            'description' => 'required|string',
+        $data = $request->validate([
+            'organization_id' => ['required', 'integer'],
             'classification' => 'nullable|in:azul,verde,amarelo,laranja,vermelho',
         ]);
 
-        $complaint->update($request->validated());
+        $complaint->update($data);
 
         return response()->json($complaint, Response::HTTP_OK);
     }

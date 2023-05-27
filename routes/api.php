@@ -13,6 +13,8 @@ Route::prefix('auth')->group(function () {
         return request()->user();
     })->middleware('auth:sanctum');
 
+    Route::post('registration', [AuthController::class, 'create']);
+
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
 
@@ -35,9 +37,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::prefix('complaints')->group(function () {
         Route::get('/', [ComplaintController::class, 'index'])->middleware('admin');
-        Route::get('/{complaints}', [ComplaintController::class, 'show']);
-        Route::put('/{complaints}', [ComplaintController::class, 'update'])->middleware('admin');
+        Route::get('/{complaint}', [ComplaintController::class, 'show']);
+        Route::put('/{complaint}', [ComplaintController::class, 'update'])->middleware('admin');
         Route::post('/', [ComplaintController::class, 'store']);
-        Route::delete('/{complaints}', [ComplaintController::class, 'destroy'])->middleware('admin');
+        Route::delete('/{complaint}', [ComplaintController::class, 'destroy'])->middleware('admin');
     });
 });
