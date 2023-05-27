@@ -13,6 +13,8 @@ Route::prefix('auth')->group(function () {
         return request()->user();
     })->middleware('auth:sanctum');
 
+    Route::post('registration', [AuthController::class, 'create']);
+
     Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 });
 
