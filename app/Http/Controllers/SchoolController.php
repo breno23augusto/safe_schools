@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\School;
 use App\Enum\StateEnum;
+use App\Models\School;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
-use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rules\Enum;
 
 class SchoolController extends Controller
@@ -35,7 +34,7 @@ class SchoolController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -58,7 +57,7 @@ class SchoolController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\School  $school
+     * @param \App\Models\School $school
      * @return \Illuminate\Http\Response
      */
     public function show(School $school)
@@ -69,8 +68,8 @@ class SchoolController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\School  $school
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\School $school
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, School $school)
@@ -93,7 +92,7 @@ class SchoolController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\School  $school
+     * @param \App\Models\School $school
      * @return \Illuminate\Http\Response
      */
     public function destroy(School $school)

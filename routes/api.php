@@ -1,11 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\SchoolController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\OrganizationController;
-
+use App\Http\Controllers\SchoolController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     Route::post('/login', [AuthController::class, 'login']);

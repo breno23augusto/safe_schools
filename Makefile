@@ -3,3 +3,6 @@ bash:
 
 up:
 	- docker-compose up -d
+
+format:
+	- docker exec -it safe_schools_api composer format
