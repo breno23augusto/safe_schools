@@ -17,5 +17,6 @@ return $config->setRules([
         'single_blank_line_at_eof' => true,
         'single_blank_line_before_namespace' => true,
         'single_line_after_imports' => true,
+        'concat_space' => ['spacing' => 'one'],
     ])
     ->setFinder($finder);
