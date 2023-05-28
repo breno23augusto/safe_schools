@@ -62,7 +62,7 @@ class SchoolController extends Controller
      */
     public function show(School $school)
     {
-        return response()->json($school, Response::HTTP_OK);
+        return $school;
     }
 
     /**
@@ -86,7 +86,7 @@ class SchoolController extends Controller
 
         $school->update($request->all());
 
-        return response()->json(['school' => $school], Response::HTTP_OK);
+        return response()->noContent();
     }
 
     /**
