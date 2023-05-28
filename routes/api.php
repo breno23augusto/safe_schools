@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\ReportsController;
 use App\Http\Controllers\SchoolController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,5 +41,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::put('/{complaint}', [ComplaintController::class, 'update'])->middleware('admin');
         Route::post('/', [ComplaintController::class, 'store']);
         Route::delete('/{complaint}', [ComplaintController::class, 'destroy'])->middleware('admin');
+    });
+
+    Route::prefix('reports')->group(function () {
+        Route::get('amountPerClassification/{year?}', [ReportsController::class, 'amountPerClassification']);
+        Route::get('amountPerMonth/{year}', [ReportsController::class, 'amountPerMonth']);
+        Route::get('amountPerSchool/{year?}', [ReportsController::class, 'amountPerSchool']);
     });
 });
