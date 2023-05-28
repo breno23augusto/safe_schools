@@ -18,8 +18,9 @@ return new class extends Migration {
             $table->foreignIdFor(User::class)->nullable();
             $table->foreignIdFor(Organization::class)->nullable();
             $table->foreignIdFor(School::class);
-            $table->text('description');
             $table->enum('classification', ['azul', 'verde', 'amarelo', 'laranja', 'vermelho'])->nullable();
+            $table->enum('status', ['postado', 'validado', 'notificado'])->default('postado');
+            $table->text('description');
 
             $table->timestamps();
 

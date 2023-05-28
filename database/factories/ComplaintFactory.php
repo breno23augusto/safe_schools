@@ -20,6 +20,7 @@ class ComplaintFactory extends Factory
             'school_id' => School::factory(),
             'description' => $this->faker->paragraph,
             'classification' => $this->faker->randomElement(['azul', 'verde', 'amarelo', 'laranja', 'vermelho']),
+            'status' => $this->faker->randomElement(['postado', 'validado', 'notificado']),
         ];
     }
 }

@@ -15,7 +15,7 @@ class Complaint extends Model
         'school_id',
         'description',
         'classification',
-        'state',
+        'status',
     ];
 
     public function user()

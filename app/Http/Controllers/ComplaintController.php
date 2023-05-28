@@ -2,30 +2,62 @@
 
 namespace App\Http\Controllers;
 
+use App\Enum\ClassificationEnum;
+use App\Enum\ComplaintStatusEnum;
+use App\Http\Resources\ComplaintResource;
 use App\Models\Complaint;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\Rule;
 
 class ComplaintController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index(Request $request)
     {
-        $complaints = Complaint::all();
+        $validated = $request->validate(
+            [
+                'per_page' => 'required|integer',
+                'school_id' => ['nullable', 'integer'],
+                'organization_id' => ['nullable', 'integer'],
+                'description' => 'nullable|string',
+                'status' => ['nullable', Rule::enum(ComplaintStatusEnum::class)],
+                'classification' => ['nullable', Rule::enum(ClassificationEnum::class)],
+            ]
+        );
 
-        return response()->json($complaints, Response::HTTP_OK);
+        $query = Complaint::query();
+
+        $query->when(!$request->user()->is_admin, function ($query) use ($request) {
+            $query->where('user_id', $request->user()->id);
+        });
+
+        $query->when(isset($validated['status']), function ($query) use ($validated) {
+            $query->where('status', $validated['status']);
+        });
+
+        $query->when(isset($validated['school_id']), function ($query) use ($validated) {
+            $query->where('school_id', $validated['school_id']);
+        });
+
+        $query->when(isset($validated['organization_id']), function ($query) use ($validated) {
+            $query->where('organization_id', $validated['organization_id']);
+        });
+
+        $query->when(isset($validated['description']), function ($query) use ($validated) {
+            $query->where('description', 'like', '%' . $validated['description'] . '%');
+        });
+
+        $query->when(isset($validated['classification']), function ($query) use ($validated) {
+            $query->where('classification', $validated['classification']);
+        });
+
+        $query->orderByDesc('created_at');
+
+        $complaints = $query->paginate($validated['per_page']);
+
+        return ComplaintResource::collection($complaints);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -33,7 +65,7 @@ class ComplaintController extends Controller
             'organization_id' => ['required', 'integer'],
             'is_anonymous' => 'required|bool',
             'description' => 'required|string',
-            'classification' => 'nullable|in:azul,verde,amarelo,laranja,vermelho',
+            'classification' => ['nullable', Rule::enum(ClassificationEnum::class)],
         ]);
 
         $requestData = $request->all();
@@ -45,42 +77,24 @@ class ComplaintController extends Controller
         return response()->json($complaint, Response::HTTP_CREATED);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\Complaint $complaint
-     * @return \Illuminate\Http\Response
-     */
     public function show(Complaint $complaint)
     {
-        return response()->json($complaint, Response::HTTP_OK);
+        return ComplaintResource::make($complaint);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Complaint $complaint
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Complaint $complaint)
     {
         $data = $request->validate([
             'organization_id' => ['required', 'integer'],
-            'classification' => 'nullable|in:azul,verde,amarelo,laranja,vermelho',
+            'status' => ['nullable', Rule::enum(ComplaintStatusEnum::class)],
+            'classification' => ['nullable', Rule::enum(ClassificationEnum::class)],
         ]);
 
         $complaint->update($data);
 
-        return response()->json($complaint, Response::HTTP_OK);
+        return response()->noContent();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\Complaint $complaint
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Complaint $complaint)
     {
         $complaint->delete();
